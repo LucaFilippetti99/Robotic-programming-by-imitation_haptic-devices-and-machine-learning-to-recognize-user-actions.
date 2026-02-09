@@ -1,75 +1,30 @@
-# Domain and View-point Agnostic Hand Action Recognition
+# Robotic programming by imitation: haptic devices and machine learning to recognize user actions.
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/domain-and-view-point-agnostic-hand-action/skeleton-based-action-recognition-on-first)](https://paperswithcode.com/sota/skeleton-based-action-recognition-on-first?p=domain-and-view-point-agnostic-hand-action)
+<img width="514" height="389" alt="TCN_pipeline" src="https://github.com/user-attachments/assets/72cafa58-7efa-4e40-80bb-2a0905b58542" />
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/domain-and-view-point-agnostic-hand-action/skeleton-based-action-recognition-on-shrec)](https://paperswithcode.com/sota/skeleton-based-action-recognition-on-shrec?p=domain-and-view-point-agnostic-hand-action)
+This repository is a fork of the [Domain-and-View-point-Agnostic-Hand-Action-Recognition](https://github.com/LucaFilippetti99/Domain-and-View-point-Agnostic-Hand-Action-Recognition) project, extended for my MSc thesis at Politecnico di Torino. It adapts hand action recognition to control robot movements via real-time pose estimation and Unity streaming.
 
-[[Paper](https://arxiv.org/abs/2103.02303)] [[Supplementary video](https://drive.google.com/file/d/11PCKkrdj2bRDRepeZGu3ke5I3iALaotH/view?usp=sharing)]
+## Project Overview
 
-This repository contains the code to train and evaluate the work presented in the article [Domain and View-point Agnostic Hand Action Recognition](https://arxiv.org/abs/2103.02303).
+The original project focuses on domain- and viewpoint-agnostic recognition of hand actions using RGB-D data and 3D poses. My thesis expands this to a full pipeline for robot teleoperation: hand actions detected with MANUS gloves drive a Unity-simulated robot arm.
 
-![Motion representation model](https://github.com/AlbertoSabater/Domain-and-View-point-Agnostic-Hand-Action-Recognition/blob/main/TCN_pipeline.png)
+Key motivations include bridging egocentric hand tracking with robotic control in AR/XR environments, tested in industrial scenarios like PCB debugging.
 
-```
-@inproceedings{sabater2021domain,
-  title={Domain and View-point Agnostic Hand Action Recognition},
-  author={Sabater, Alberto and Alonso, I{\~n}igo and Montesano, Luis and Murillo, Ana C},
-  booktitle={2021 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
-  year={2021},
-}
-```
+## New Contributions
 
-## Pre-trained models
+- **Custom MANUS Dataset**: Recorded 10+ action sequences (e.g., grasp, point, wave) using MANUS Prime gloves in varied lighting/views. Dataset includes synchronized VR hand poses, RGB videos, and annotations (~5k frames).
 
-Download the desired models used in the paper and store them under `./pretrained_models/`.
+- **Code Modifications**:
+  - Updated pose extraction for MANUS VR data streams.
+  - Integrated real-time inference with OpenCV for 30fps processing.
 
-### Cross-domain
-* [Last TCN descriptor](https://drive.google.com/file/d/1G8etWqt--gKG7P9NwEYIkSEw56JCdlBB/view?usp=sharing)
-* [Summarization (Best)](https://drive.google.com/file/d/14SAHXg6TWNSc8pWjhuEDN2sQadbXTi_q/view?usp=sharing)
+- **Unity Integration**: Standalone Unity project (to be added). Supports WebRTC for low-latency teleop.
 
-### Intra-domain
-* [F-PHAB models](https://drive.google.com/file/d/1yF6fAxgabas3juLb6TDBSbAek2YhbYZ8/view?usp=sharing)
-* [SHREC17 models](https://drive.google.com/file/d/19dliuo0MJv0seOcOVd-2L2kQHvsASo3q/view?usp=sharing)
+<img width="1319" height="275" alt="RT_pipeline" src="https://github.com/user-attachments/assets/ab405b1b-7485-4c46-9e4d-a3b6bcc3ef43" />
 
 
-## Data format
+## Pipeline
 
-The present project uses skeleton representations based on the 20-joints that SHREC17 and F-PHAB have in common.
-
-In F-PHAB Dataset: `Wrist, TPIP, TDIP, TTIP, IMCP, IPIP, IDIP, ITIP, MMCP, MPIP, MDIP, MTIP, RMCP, RPIP, RDIP, RTIP, PMCP, PPIP, PDIP, PTIP`
-
-In SHREC-17 Dataset: `Wrist, thumb_first_joint, thumb_second_joint, thumb_tip, index_base, index_first_joint, index_second_joint, index_tip, middle_base, middle_first_joint, middle_second_joint, middle_tip, ring_base, ring_first_joint, ring_second_joint, ring_tip, pinky_base, pinky_first_joint, pinky_second_joint, pinky_tip`
-
-The **7-joints minimal** skeleton representation proposed in the paper uses the skeleton joints indexed by `0,8,3,7,11,15,19`, which stands for `Wrist, middle_base, thumb_tip, index_tip, middle_tip, ring_tip, pinky_tip`.
-
-![Skeleton representations](https://github.com/AlbertoSabater/Domain-and-View-point-Agnostic-Hand-Action-Recognition/blob/main/minimal_hand_v2.png)
-
-Original skeletons files can be transformed to the 20-joints format with the scripts for [SHREC17](https://github.com/AlbertoSabater/Domain-View-point-Agnostic-Hand-Action-Recognition/blob/main/dataset_scripts/common_pose/shrec17_to_common_pose.py) and [F-PHAB](https://github.com/AlbertoSabater/Domain-View-point-Agnostic-Hand-Action-Recognition/blob/main/dataset_scripts/common_pose/f-phab_to_common_pose.py), and stored under `./datasets/`. Minimal 7-joints format is later obtained with the `DataGenerator`.
-
-**F-PHAB data splits** used for the evaluation are located under `./dataset_scripts/F_PHAB/paper_tables_annotations/`.
+<img width="1580" height="360" alt="myPipeline" src="https://github.com/user-attachments/assets/35531497-b486-4501-818c-54073f0c2245" />
 
 
-## Python dependencies
-
-Project tested with the following dependencies:
-
- * python 3.6
- * tensorflow 2.3.0
- * Keras 2.3.1
- * keras-tcn 3.1.0
- * scikit-learn 0.22.2
- * scipy 1.4.1
- * pandas 1.0.3
-
-
-## Cross-domain action recognition evaluation
-
-Execute the file `action_recognition_evaluation.py` to perform the cross-domain evaluation reported in the paper. The script loads skeleton action sequences, augments them, generates sequence embeddings and performs the KNN classification. Final results show the accuracy calculated both with and without motion reference set augmentation. Use the following flags to evaluate different datasets. `--eval_fphab`, `--eval_msra`
-
-To reproduce the results given in the Table III from the paper, download the cross-domain models and execute the following commands:
-
-`python action_recognition_evaluation.py --path_model ./pretrained_models/xdom_last_descriptor --loss_name mixknn_train5_val1 --eval_fphab`
-
-`python action_recognition_evaluation.py --path_model ./pretrained_models/xdom_summarization --loss_name mixknn_best --eval_fphab --eval_msra`
-
-Note that, since random operations are involved in the evaluation, final results can slightly differ from the results reported in the paper.
